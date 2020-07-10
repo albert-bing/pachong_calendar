@@ -37,6 +37,15 @@ def get_data_day(url):
 
     # 转化为字典
     dick_data = json.loads(res)
+    gongli = dick_data['html']['gongli'].split(" ")
+    dick_data['html']['gongli'] = gongli[0]
+    dick_data['html']['constellation'] = gongli[1]
+
+    nongli = dick_data['html']['nongli'].split(" ")
+    dick_data['html']['nongli'] = nongli[0]
+    dick_data['html']['chinese_zodiac'] = nongli[1]
+
+    dick_data['html']['chong'] = dick_data['html']['chong'].replace('&nbsp;', ' ')
     # 将字典转化为json
     # json_data = json.dumps(dick_data)
     # print(dick_data['html']['nongli'])
@@ -66,7 +75,7 @@ def get_month_data(month_days_n, month, y_date):
             day_data['day'], day_data['html']['gongli'], day_data['html']['nongli'], day_data['html']['dao'], \
             day_data['html']['start'], day_data['html']['yi'], day_data['html']['ji'], day_data['html']['chong'], \
             day_data['html']['suici'], day_data['html']['wuxing'], day_data['html']['cai'], day_data['html']['xi'], \
-            day_data['html']['fu'])
+            day_data['html']['fu'],day_data['html']['constellation'],day_data['html']['chinese_zodiac'])
         month_data.append(day_tup)
         # print("day", day_data)
         # print("-" * 60)
@@ -125,8 +134,8 @@ if __name__ == '__main__':
 
     # 按月插入的代码测试
     days = 31
-    str1 = '10'
-    str2 = '201010'
+    str1 = '12'
+    str2 = '201012'
     m_data = get_month_data(days,str1,str2)
     print(m_data)
-    # MysqlUtil.insert_data_yellow_calendar(m_data)
+    MysqlUtil.insert_data_yellow_calendar(m_data)
