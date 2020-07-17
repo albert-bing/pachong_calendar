@@ -8,9 +8,7 @@
 
 
 #  start your code
-
+import datetime
+import time
 if __name__ == '__main__':
-    str = '2020年7月'
-    da = str.split('年')[0]
-    data = str.split('年')[1].split('月')[0]
-    print(da+data)
+    print(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())))
