@@ -11,4 +11,9 @@
 import datetime
 import time
 if __name__ == '__main__':
-    print(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())))
+    str = "07月20日"
+    s = "日"
+    if ('日' in str):
+        print("有")
+    else:
+        print("没有")

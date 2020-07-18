@@ -88,7 +88,7 @@ def get_source_data(driver):
 
             # 插入一个省的所有数据
         print(insert_pro_data)
-        MysqlUtil.insert_foreign_data(insert_pro_data)
+        # MysqlUtil.insert_foreign_data(insert_pro_data)
 
 
 def get_every_data(driver):
@@ -99,6 +99,7 @@ def get_every_data(driver):
 
     soup = BeautifulSoup(driver.page_source, "html.parser")
     con_trs_data = soup.find_all("tr", attrs={"class": "VirusTable_1-1-279_2AH4U9"})
+
 
     print(len(con_trs_data))
 
