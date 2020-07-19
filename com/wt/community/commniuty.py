@@ -91,6 +91,7 @@ def get_data_resource(driver):
         cities_list = []
         for num in range(0, len(cities), 1):
             cities_list.append(cities[num].text)
+
         print("line:64 ===  城市", cities_list)
         # 收起城市下拉菜单
         tabs_btn[1].click()
@@ -103,41 +104,70 @@ def get_data_resource(driver):
             # 点击一个市
             cities_tabs[mm].click()
             # 延迟一秒
-            time.sleep(1)
+            time.sleep(2)
 
             # 如果有查看更多，则点开
             try:
                 viewmore = driver.find_elements_by_class_name("more-box")
-                for c in range(0,len(viewmore),1):
+                for c in range(0, len(viewmore), 1):
                     viewmore[c].click()
             except Exception:
                 pass
 
+            time.sleep(1)
+
             # print("line:108 一个城市的数据", BeautifulSoup(driver.page_source, "html.parser").text)
             city_file = BeautifulSoup(driver.page_source, "html.parser")
-            analyze_data(driver, pros_list[nn], cities_list[mm],city_file)
+
+            # 获取日期
+            spans = city_file.find_all(name='div', attrs={"class": "banner-data-from"})
+            date_today = spans[0].select("span")[1].text.split("更")[0].strip()
+
+            create_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
+            update_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
+
+            # 如果为特殊情况的话
+            try:
+                no_data_city_people = city_file.find_all(name='div', attrs={'class': 'total-tips'})[0].select("span")[0].text
+                no_data_city = [date_today, pros_list[nn], cities_list[mm], "", no_data_city_people, "", "", "", "", "",
+                                "", "", create_time, update_time]
+                print("line:129  ", no_data_city)
+
+            except Exception:
+                try:
+                    info_text = city_file.find_all(name="div", attrs={"class": "nodata-tips"})[0].text
+                    if len(info_text) > 1:
+                        no_data_city = [date_today, pros_list[nn], cities_list[mm], "", "", "", "", "", "", "",
+                                        "", "", create_time, update_time]
+                        print("line:139  ", no_data_city)
+                except Exception:
+                    analyze_data(driver, pros_list[nn], cities_list[mm], date_today, city_file)
     driver.quit()
 
 
 # 解析数据
-def analyze_data(driver, pro_name, city_name, source_data):
+def analyze_data(driver, pro_name, city_name, date_today, source_data):
     # 一个城市的数据
     city_data = []
-    # 获取日期
-    spans = source_data.find_all(name='div', attrs={"class": "banner-data-from"})
-    date_today = spans[0].select("span")[1].text.split("更")[0].strip()
-    print("line:119 日期：", date_today)
+
+    # print("line:119 日期：", date_today)
     print("省份：", pro_name)
     print("城市：", city_name)
 
     # 名称 & 人数
-    city_info = source_data.find_all(name="div", attrs={"class": "info"})
-    city_people = city_info[0].select("span")[0].text
-    print("line:129 城市人数：", city_people)
+    try:
+        city_info = source_data.find_all(name="div", attrs={"class": "info"})
+        city_people = city_info[0].select("span")[0].text
+    except IndexError:
+        city_people = "0"
+    # print("line:129 城市人数：", city_people)
     # 获取 每一个区 & ’最新消息‘ 的单元的信息
     items_list = source_data.find_all(name="div", attrs={"class": "train-lst"})
     # 使用循环实现 遍历所有的区、县
     for a in range(0, len(items_list), 1):
+
+        driver.execute_script('window.scrollTo(0,100);')
+
         area_name = items_list[a].find_all(name="div", attrs={"class": "title"})[0].text
         print("line:134  地区名称：", area_name)
         total_place_number = ''
@@ -147,10 +177,13 @@ def analyze_data(driver, pro_name, city_name, source_data):
             spans = subs[0].select("span")
             # 涉事地区数量
             total_place_number = spans[0].text
-            print("涉事地区数量：", total_place_number)
+            # print("涉事地区数量：", total_place_number)
             # 涉事人员数量
-            total_person_number = spans[1].text
-            print("涉事人员数量：", total_person_number)
+            try:
+                total_person_number = spans[1].text
+            except IndexError:
+                total_person_number = "暂无"
+            # print("涉事人员数量：", total_person_number)
 
         # 社区信息
         tbody = items_list[a].select("tbody")
@@ -176,14 +209,17 @@ def analyze_data(driver, pro_name, city_name, source_data):
             # 与我距离
             distance_from_me = tds[2].select("p")[0].text
 
-            # 拼接一条数据  当前日期、省份名称、市名称、地区、城市确诊人数、逗留地点、逗留性质、逗留人数、发布日期、与我距离、共计涉事地区、攻击涉事人员
+            create_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
+            update_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
+
+            # 拼接一条数据  当前日期、省份名称、市名称、地区、城市确诊人数、逗留地点、逗留性质、逗留人数、发布日期、与我距离、共计涉事地区、攻击涉事人员、创建和更新时间
             one_piece_data = [date_today, pro_name, city_name, area_name, city_people, stay_place, nature_of_stay,
                               stay_people_number, release_date, distance_from_me, total_place_number,
-                              total_person_number]
+                              total_person_number, create_time, update_time]
             print("line:178 小区：", one_piece_data)
-            driver.quit()
+            # driver.quit()
             city_data.append(one_piece_data)
-    driver.quit()
+    # driver.quit()
 
 
 if __name__ == '__main__':
