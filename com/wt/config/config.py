@@ -9,5 +9,7 @@
 
 #  start your code
 
-_CHROME_DRIVER_WIN = 'F:/software/chromedriver.exe'
-# _CHROME_DRIVER_WIN = 'D:/softTools/chromedriver_win32/chromedriver.exe'
+# myself
+# _CHROME_DRIVER_WIN = 'F:/software/chromedriver.exe'
+# company
+_CHROME_DRIVER_WIN = 'D:/softInstall/chromedriver.exe'

@@ -10,10 +10,8 @@
 #  start your code
 import datetime
 import time
+from urllib.parse import quote
 if __name__ == '__main__':
-    str = "07月20日"
-    s = "日"
-    if ('日' in str):
-        print("有")
-    else:
-        print("没有")
+    url = "https://ncov.html5.qq.com/api/getNewestCommunityNew?&province="
+    ll = url+quote("山西省")
+    print(ll)

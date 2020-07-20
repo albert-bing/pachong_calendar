@@ -186,3 +186,18 @@ def insert_internal_cur_day_data(data):
     db.commit()
     db.close()
     print("mysql-插入成功！\n")
+
+
+def insert_community_data(data):
+    db = pymysql.connect(host='152.136.108.36', user='root', password='wutong123', port=3306, db='epidemic')
+    cursor = db.cursor()
+    # 省名称、市名称（省的话，就还是使用省名称）、日期、确诊(累计)人数、治愈人数、死亡人数、新增人数
+    # 省名称、市名称（省的话，就还是使用省名称）、日期、确诊(累计)人数、治愈人数、死亡人数、新增人数
+    sql = 'REPLACE INTO epi_community(`date_today`,`province`,`city`,`district`,`street`,`middle_address`,`community`,' \
+          '`show_address`,`full_address`,`lng`,`lat`,`cnt_sum_certain`,`release_date`,`create_time`,`update_time`) ' \
+          'VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);'
+    cursor.executemany(sql, data)
+    cursor.close()
+    db.commit()
+    db.close()
+    print("mysql-插入成功！\n")
