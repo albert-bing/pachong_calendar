@@ -106,7 +106,7 @@ def get_source_data(driver):
             # print(dick_data["data"][0]["province"])
             # print(dick_data)
             analysis_data(dick_data, date_today)
-
+        time.sleep(5)
 
 def analysis_data(dick_data, date_today):
     d_data = dick_data["data"]
