@@ -29,8 +29,10 @@ import urllib3
 import time
 
 # 忽略https的安全警告
-urllib3.disable_warnings()
+# urllib3.disable_warnings()
 
+from fake_useragent import UserAgent
+import random
 
 # 创建driver
 def create_driver():
@@ -96,17 +98,29 @@ def get_source_data(driver):
 
         print("line:64 ===  城市", cities_list)
 
+        # 其实很好理解，就是告诉你要下载的那个图片页面，我是从主页面来的，现在把数据给我。
+        headers = {'User-Agent': 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, '
+                                 'like Gecko) Chrome/84.0.4147.89 Mobile Safari/537.36', 'Referer':
+            'https://ncov.html5.qq.com/community'}
         for mm in range(0, len(cities_list), 1):
             pro_text = quote(pros_list[nn])
             city_text = quote(cities_list[mm])
 
             url = f"https://ncov.html5.qq.com/api/getNewestCommunityNew?&province={pro_text}&city={city_text}&district={scope}"
-            city_source_file = requests.get(url=url, verify=False)
+            city_source_file = requests.get(url=url,headers=headers)
             dick_data = json.loads(city_source_file.text)
             # print(dick_data["data"][0]["province"])
             # print(dick_data)
-            analysis_data(dick_data, date_today)
-        time.sleep(5)
+            one_city = analysis_data(dick_data, date_today)
+            if not one_city:
+                one_city = [date_today, pros_list[nn], cities_list[mm], "", "", "", "", "", "", "", "", "", "",
+                            time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())),
+                            time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))]
+            else:
+                MysqlUtil.insert_community_data(one_city)
+            print(one_city)
+        time.sleep(1)
+
 
 def analysis_data(dick_data, date_today):
     d_data = dick_data["data"]
@@ -149,8 +163,8 @@ def analysis_data(dick_data, date_today):
         one_city_data.append(one_data)
 
         # print(one_data)
-    MysqlUtil.insert_community_data(one_city_data)
-    print(one_city_data)
+    return one_city_data
+    # print(one_city_data)
 
 
 if __name__ == '__main__':
