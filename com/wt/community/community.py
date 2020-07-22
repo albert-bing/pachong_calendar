@@ -34,6 +34,7 @@ import time
 from fake_useragent import UserAgent
 import random
 
+
 # 创建driver
 def create_driver():
     chrome_options = Options()
@@ -72,7 +73,8 @@ def get_source_data(driver):
     pros_list = []
     for num in range(0, len(pros), 1):
         pros_list.append(pros[num].text)
-    print("line:71 ===  省份", pros_list)
+    # print("line:71 ===  省份", pros_list)
+    # 进行Urlcode编码的转码  %E%T%R 类似这样的
     scope = quote("全部")
     # 将省的下拉菜单收起
     tabs_btn[0].click()
@@ -96,36 +98,37 @@ def get_source_data(driver):
         for num in range(0, len(cities), 1):
             cities_list.append(cities[num].text)
 
-        print("line:64 ===  城市", cities_list)
+        # print("line:64 ===  城市", cities_list)
 
-        # 其实很好理解，就是告诉你要下载的那个图片页面，我是从主页面来的，现在把数据给我。
         headers = {'User-Agent': 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, '
                                  'like Gecko) Chrome/84.0.4147.89 Mobile Safari/537.36', 'Referer':
-            'https://ncov.html5.qq.com/community'}
+                       'https://ncov.html5.qq.com/community'}
         for mm in range(0, len(cities_list), 1):
             pro_text = quote(pros_list[nn])
             city_text = quote(cities_list[mm])
-
+            # 拼接链接
             url = f"https://ncov.html5.qq.com/api/getNewestCommunityNew?&province={pro_text}&city={city_text}&district={scope}"
-            city_source_file = requests.get(url=url,headers=headers)
+            # 加入一个headers，因为持续的外部请求，会导致请求失败的
+            city_source_file = requests.get(url=url, headers=headers)
             dick_data = json.loads(city_source_file.text)
             # print(dick_data["data"][0]["province"])
             # print(dick_data)
             one_city = analysis_data(dick_data, date_today)
+            # 判断是否为空，如果城市数据为空，那么就只存城市名称等信息
             if not one_city:
                 one_city = [date_today, pros_list[nn], cities_list[mm], "", "", "", "", "", "", "", "", "", "",
                             time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())),
                             time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))]
             else:
                 MysqlUtil.insert_community_data(one_city)
-            print(one_city)
+            # print(one_city)
         time.sleep(1)
 
 
 def analysis_data(dick_data, date_today):
     d_data = dick_data["data"]
     one_city_data = []
-
+    # 将一个城市的数据整理好
     for d in range(0, len(d_data), 1):
         one_data = [date_today, d_data[d]["province"], d_data[d]["city"], d_data[d]["district"]]
         try:
@@ -170,3 +173,5 @@ def analysis_data(dick_data, date_today):
 if __name__ == '__main__':
     driver = create_driver()
     get_source_data(driver)
+
+

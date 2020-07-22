@@ -41,9 +41,9 @@ def get_internal_data(driver):
     # 获取网页源文件
     soup = BeautifulSoup(driver.page_source, "html.parser")
     # 拿到所有的累计数据
-    ptab0 = soup.find_all(name='div', attrs={'class': 'VirusSummarySix_1-1-279_3haLBF VirusSummarySix_1-1-279_2ZJJBJ'})
+    ptab0 = soup.find_all(name='div', attrs={'class': 'VirusSummarySix_1-1-280_3haLBF VirusSummarySix_1-1-280_2ZJJBJ'})
     # 拿到比较昨日的数据
-    ptab1 = soup.find_all(name='span', attrs={'class': 'VirusSummarySix_1-1-279_2ZJJBJ'})
+    ptab1 = soup.find_all(name='span', attrs={'class': 'VirusSummarySix_1-1-280_2ZJJBJ'})
     # 获取时间
     return analysis_data(ptab0, ptab1, soup)
 
@@ -52,14 +52,15 @@ def get_foreign_data(driver):
     driver.get("https://voice.baidu.com/act/newpneumonia/newpneumonia/?from=osari_pc_3#tab4")
     soup = BeautifulSoup(driver.page_source, "html.parser")
     ptab0 = soup.find_all(name='div', attrs={
-        'class': 'VirusSummary_1-1-279_1lOkwH VirusSummary_1-1-279_2fhqEt VirusSummary_1-1-279_3Iv8cV'})
-    ptab1 = soup.find_all(name='span', attrs={'class': 'VirusSummary_1-1-279_2fhqEt'})
+        'class': 'VirusSummary_1-1-280_1lOkwH VirusSummary_1-1-280_2fhqEt VirusSummary_1-1-280_3Iv8cV'})
+    ptab1 = soup.find_all(name='span', attrs={'class': 'VirusSummary_1-1-280_2fhqEt'})
     # 获取时间
     return analysis_data(ptab0, ptab1, soup)
 
 
 def analysis_data(ptab0, ptab1, soup):
-    cur_time_text = soup.find_all(name='div', attrs={'class': 'Virus_1-1-279_32Y_aO'})[0].select('span')[0].text.split(
+    # 获取当前时间
+    cur_time_text = soup.find_all(name='div', attrs={'class': 'Virus_1-1-280_32Y_aO'})[0].select('span')[0].text.split(
         " ")
     ymd = cur_time_text[1]
     cur_time = cur_time_text[1] + " " + cur_time_text[2]
@@ -82,6 +83,7 @@ if __name__ == '__main__':
     in_data.append(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())))
     # update_time
     in_data.append(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())))
+    # print(in_data)
     MysqlUtil.insert_current_epidemic_internal(in_data)
 
     # 国外数据
@@ -91,5 +93,6 @@ if __name__ == '__main__':
     fo_data.append(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())))
     # update_time
     fo_data.append(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())))
+    # print(fo_data)
     MysqlUtil.insert_current_epidemic_foreign(fo_data)
 
