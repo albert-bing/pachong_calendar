@@ -83,8 +83,8 @@ if __name__ == '__main__':
     in_data.append(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())))
     # update_time
     in_data.append(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())))
-    # print(in_data)
-    MysqlUtil.insert_current_epidemic_internal(in_data)
+    print(in_data)
+    # MysqlUtil.insert_current_epidemic_internal(in_data)
 
     # 国外数据
     fo_data = get_foreign_data(driver)
@@ -93,6 +93,8 @@ if __name__ == '__main__':
     fo_data.append(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())))
     # update_time
     fo_data.append(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())))
-    # print(fo_data)
-    MysqlUtil.insert_current_epidemic_foreign(fo_data)
+    print(fo_data)
+    # MysqlUtil.insert_current_epidemic_foreign(fo_data)
+
+    driver.quit()
 

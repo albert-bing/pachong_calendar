@@ -118,8 +118,8 @@ def get_data_resource_province(driver):
         insert_pro_data.append(p_data)
 
     # 插入所有省的当日数据
-    # print(insert_pro_data)
-    MysqlUtil.insert_internal_cur_day_data(insert_pro_data)
+    print(insert_pro_data)
+    # MysqlUtil.insert_internal_cur_day_data(insert_pro_data)
 
     return insert_pro_data
 
@@ -169,8 +169,8 @@ def get_data_resource_city(driver, pro_list):
                 c_list.append(p_data)
 
         # 一个省的市数据，批量插入一次
-        # print(c_list)
-        MysqlUtil.insert_internal_cur_day_data(c_list)
+        print(c_list)
+        # MysqlUtil.insert_internal_cur_day_data(c_list)
 
         city_trs_data = []
         tds = []
@@ -197,4 +197,6 @@ if __name__ == '__main__':
 
     time.sleep(5)
     # 给数据添加area_id
-    MysqlUtil.insert_internal_cur_day_data_add_areaId()
+    # MysqlUtil.insert_internal_cur_day_data_add_areaId()
+
+    driver.quit()

@@ -31,8 +31,7 @@ import time
 # 忽略https的安全警告
 # urllib3.disable_warnings()
 
-from fake_useragent import UserAgent
-import random
+
 
 
 # 创建driver
@@ -118,11 +117,14 @@ def get_source_data(driver):
             if not one_city:
                 one_city = [date_today, pros_list[nn], cities_list[mm], "", "", "", "", "", "", "", "", "", "",
                             time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())),
-                            time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))]
+                            time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())),"Point(0,0)"]
             else:
                 MysqlUtil.insert_community_data(one_city)
-            # print(one_city)
+                # pass
+            print(one_city)
         time.sleep(1)
+
+    driver.quit()
 
 
 def analysis_data(dick_data, date_today):
@@ -163,9 +165,11 @@ def analysis_data(dick_data, date_today):
         one_data.append(create_time)
         one_data.append(update_time)
 
+        one_data.append(f'Point({d_data[d]["lng"]} {d_data[d]["lat"]})')
+
         one_city_data.append(one_data)
 
-        # print(one_data)
+        print(one_data)
     return one_city_data
     # print(one_city_data)
 

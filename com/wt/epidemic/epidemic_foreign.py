@@ -107,3 +107,6 @@ def get_every_data(driver):
 if __name__ == '__main__':
     driver = create_driver()
     get_source_data(driver)
+
+    time.sleep(1)
+    driver.quit()
