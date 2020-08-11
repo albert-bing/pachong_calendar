@@ -26,6 +26,11 @@ import time
 # 忽略https的安全警告
 urllib3.disable_warnings()
 
+# 8.3  11：00
+# 8.7
+# 8.11
+
+number = "284"
 
 # 创建driver
 def create_driver():
@@ -41,9 +46,9 @@ def get_internal_data(driver):
     # 获取网页源文件
     soup = BeautifulSoup(driver.page_source, "html.parser")
     # 拿到所有的累计数据
-    ptab0 = soup.find_all(name='div', attrs={'class': 'VirusSummarySix_1-1-280_3haLBF VirusSummarySix_1-1-280_2ZJJBJ'})
+    ptab0 = soup.find_all(name='div', attrs={'class': 'VirusSummarySix_1-1-'+number+'_3haLBF VirusSummarySix_1-1-'+number+'_2ZJJBJ'})
     # 拿到比较昨日的数据
-    ptab1 = soup.find_all(name='span', attrs={'class': 'VirusSummarySix_1-1-280_2ZJJBJ'})
+    ptab1 = soup.find_all(name='span', attrs={'class': 'VirusSummarySix_1-1-'+number+'_2ZJJBJ'})
     # 获取时间
     return analysis_data(ptab0, ptab1, soup)
 
@@ -52,15 +57,15 @@ def get_foreign_data(driver):
     driver.get("https://voice.baidu.com/act/newpneumonia/newpneumonia/?from=osari_pc_3#tab4")
     soup = BeautifulSoup(driver.page_source, "html.parser")
     ptab0 = soup.find_all(name='div', attrs={
-        'class': 'VirusSummary_1-1-280_1lOkwH VirusSummary_1-1-280_2fhqEt VirusSummary_1-1-280_3Iv8cV'})
-    ptab1 = soup.find_all(name='span', attrs={'class': 'VirusSummary_1-1-280_2fhqEt'})
+        'class': 'VirusSummary_1-1-'+number+'_1lOkwH VirusSummary_1-1-'+number+'_2fhqEt VirusSummary_1-1-'+number+'_3Iv8cV'})
+    ptab1 = soup.find_all(name='span', attrs={'class': 'VirusSummary_1-1-'+number+'_2fhqEt'})
     # 获取时间
     return analysis_data(ptab0, ptab1, soup)
 
 
 def analysis_data(ptab0, ptab1, soup):
     # 获取当前时间
-    cur_time_text = soup.find_all(name='div', attrs={'class': 'Virus_1-1-280_32Y_aO'})[0].select('span')[0].text.split(
+    cur_time_text = soup.find_all(name='div', attrs={'class': 'Virus_1-1-'+number+'_32Y_aO'})[0].select('span')[0].text.split(
         " ")
     ymd = cur_time_text[1]
     cur_time = cur_time_text[1] + " " + cur_time_text[2]

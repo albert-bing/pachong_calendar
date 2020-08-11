@@ -119,12 +119,10 @@ def get_source_data(driver):
                             time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())),
                             time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())),"Point(0,0)"]
             else:
-                MysqlUtil.insert_community_data(one_city)
-                # pass
+                # MysqlUtil.insert_community_data(one_city)
+                pass
             print(one_city)
         time.sleep(1)
-
-    driver.quit()
 
 
 def analysis_data(dick_data, date_today):
@@ -178,4 +176,5 @@ if __name__ == '__main__':
     driver = create_driver()
     get_source_data(driver)
 
-
+    time.sleep(1)
+    driver.quit()

@@ -29,6 +29,7 @@ import time
 # 忽略https的安全警告
 urllib3.disable_warnings()
 
+number = "284"
 
 # 获取省份的历史疫情数据
 def get_data_resource_province_history(driver):
@@ -90,12 +91,12 @@ def get_data_resource_province(driver):
     time.sleep(3)
 
     # 点击打开省份的下拉列表
-    driver.find_element_by_class_name("Common_1-1-280_3lDRV2").click()
+    driver.find_element_by_class_name("Common_1-1-"+number+"_3lDRV2").click()
 
     soup = BeautifulSoup(driver.page_source, "html.parser")
-    pro_trs_data = soup.find_all("tr", attrs={"class": "VirusTable_1-1-280_3m6Ybq"})
+    pro_trs_data = soup.find_all("tr", attrs={"class": "VirusTable_1-1-"+number+"_3m6Ybq"})
     # 获取时间
-    time_file = driver.find_element_by_class_name("Virus_1-1-280_32Y_aO")
+    time_file = driver.find_element_by_class_name("Virus_1-1-"+number+"_32Y_aO")
     today_time = time_file.text.split(" ")[1]
 
     insert_pro_data = []
@@ -130,11 +131,11 @@ def get_data_resource_city(driver, pro_list):
     # 因为上一个方法已经打开下拉菜单，所以这里就不在重复打开了
     # driver.find_element_by_class_name("Common_1-1-279_3lDRV2").click()
 
-    trs_list = driver.find_elements_by_class_name("VirusTable_1-1-280_3m6Ybq")
+    trs_list = driver.find_elements_by_class_name("VirusTable_1-1-"+number+"_3m6Ybq")
     # 屏幕向下滚动，获取点击事件
     driver.execute_script("window.scrollTo(0,1000);")
     # 获取时间
-    time_file = driver.find_element_by_class_name("Virus_1-1-280_32Y_aO")
+    time_file = driver.find_element_by_class_name("Virus_1-1-"+number+"_32Y_aO")
     today_time = time_file.text.split(" ")[1]
 
     # 循环点击，将所有的都点开
@@ -143,7 +144,7 @@ def get_data_resource_city(driver, pro_list):
         # 存放一个省的市的数据
         c_list = []
         soup = BeautifulSoup(driver.page_source, "html.parser")
-        city_trs_data = soup.find_all("tr", attrs={"class": "VirusTable_1-1-280_2AH4U9"})
+        city_trs_data = soup.find_all("tr", attrs={"class": "VirusTable_1-1-"+number+"_2AH4U9"})
         tds = city_trs_data[0].select("td")
         if tds[0].text == '美国':
             continue
@@ -195,8 +196,10 @@ if __name__ == '__main__':
     # 获取城市的当日疫情数据
     get_data_resource_city(driver, pro_list)
 
-    time.sleep(5)
+    time.sleep(3)
     # 给数据添加area_id
     # MysqlUtil.insert_internal_cur_day_data_add_areaId()
+
+
 
     driver.quit()
