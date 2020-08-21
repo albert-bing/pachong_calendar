@@ -221,4 +221,16 @@ def insert_community_data(data):
     db.close()
     print("mysql-插入成功！\n")
 
-
+# 插入境外输入的数据
+def insert_import_abroad(data):
+    db = pymysql.connect(host='bigdata06', user='root', password='wutong123', port=3306, db='epidemic')
+    cursor = db.cursor()
+    # 省名称、境外输入、日期、确诊(累计)人数、治愈人数、死亡人数、新增人数
+    sql = 'REPLACE INTO epi_import_abroad(`date_today`,`province_name`,`class_name`,`new_add`,' \
+          '`existing_diagnosis`,`cumulative_diagnosis`,`cumulative_cure`,`cumulative_deaths`,`create_time`,`update_time`) ' \
+          'VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);'
+    cursor.executemany(sql, data)
+    cursor.close()
+    db.commit()
+    db.close()
+    print("mysql-插入成功--境外输入数据！\n")
