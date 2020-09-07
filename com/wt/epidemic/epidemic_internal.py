@@ -29,7 +29,7 @@ import time
 # 忽略https的安全警告
 urllib3.disable_warnings()
 
-number = "284"
+number = "285"
 
 
 # 获取省份的历史疫情数据
