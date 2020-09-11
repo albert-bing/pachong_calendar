@@ -221,6 +221,7 @@ def insert_community_data(data):
     db.close()
     print("mysql-插入成功！\n")
 
+
 # 插入境外输入的数据
 def insert_import_abroad(data):
     db = pymysql.connect(host='bigdata06', user='root', password='wutong123', port=3306, db='epidemic')
@@ -234,3 +235,17 @@ def insert_import_abroad(data):
     db.commit()
     db.close()
     print("mysql-插入成功--境外输入数据！\n")
+
+
+#  获取县区的信息
+def select_area():
+    db = pymysql.connect(host='bigdata06', user='root', password='wutong123', port=3306, db='epidemic')
+    cursor = db.cursor()
+    # 省名称、境外输入、日期、确诊(累计)人数、治愈人数、死亡人数、新增人数
+    sql = 'SELECT area from epidemic.pro_city_area_dim;'
+    cursor.execute(sql)
+    result = cursor.fetchall()
+    cursor.close()
+    db.commit()
+    db.close()
+    return result

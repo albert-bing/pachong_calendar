@@ -1,0 +1,57 @@
+# 获取ford的市区信息
+def get_lbs_new():
+    url = "https://www.ford.com.cn/content/ford/cn/zh_cn/configuration/application-and-services-config/provinceCityDropDowns.multiFieldDropdownChina.data"
+    resource_data = requests.get(url=url, verify=False)
+    dick_data = json.loads(resource_data.text)
+    for j in range(len(dick_data)):
+        for i in range(0,len(dick_data[j]['cityList']),1):
+            print(dick_data[j]['cityList'][i]['cityValue'])
+
+# 获取经销商的信息
+def get_dealers():
+    headers = {
+        'authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IldDblBtalVhQTY0YWhxcG9TS0JrNjkxZDdGayIsImtpZCI6IldDblBtalVhQTY0YWhxcG9TS0JrNjkxZDdGayJ9.eyJhdWQiOiJmMmQzNWM4OC0zMzFjLTQ2MGUtODQ2Ny0zNmFmMGRmYzUwY2IiLCJpc3MiOiJodHRwczovL3N0cy5jaGluYWNsb3VkYXBpLmNuLzM5NTMzOTZjLTgxNGMtNGRiZS1iNTQzLWFlNDk5OTk3ODIwNi8iLCJpYXQiOjE1OTk1NjY3OTIsIm5iZiI6MTU5OTU2Njc5MiwiZXhwIjoxNTk5NTcwNjkyLCJhaW8iOiI0MkJnWUhBNFZ2Sm9BZnVNTXljUHp2WVNLczFZQ0FBPSIsImFwcGlkIjoiYTdmODFkMGEtNzU3ZS00NzIzLWIzZGItMDk2MDYwMTAxNWRiIiwiYXBwaWRhY3IiOiIxIiwiaWRwIjoiaHR0cHM6Ly9zdHMuY2hpbmFjbG91ZGFwaS5jbi8zOTUzMzk2Yy04MTRjLTRkYmUtYjU0My1hZTQ5OTk5NzgyMDYvIiwib2lkIjoiNDkxYWJkNzAtZGQxNy00N2JmLTlkZWEtNWQ3MWY4OTA3MzYyIiwicmgiOiIwLkFBQUFiRGxUT1V5QnZrMjFRNjVKbVplQ0Jnb2QtS2QtZFNOSHM5c0pZR0FRRmRzQkFBQS4iLCJyb2xlcyI6WyJMZWFkcy5BcHAuV3JpdGUiLCJVc2VyVmVoaWNsZS5BcHAuQ29uc3VtZXIiLCJTaG9wLkFwcC5Db25zdW1lciIsIkFjY291bnQuQXBwLkNvbnN1bWVyIiwiVXRpbC5BcHAuQ29uc3VtZXIiXSwic3ViIjoiNDkxYWJkNzAtZGQxNy00N2JmLTlkZWEtNWQ3MWY4OTA3MzYyIiwidGlkIjoiMzk1MzM5NmMtODE0Yy00ZGJlLWI1NDMtYWU0OTk5OTc4MjA2IiwidXRpIjoid0I0Z0d6dnZCMG1FU3RQR1dITXlBQSIsInZlciI6IjEuMCJ9.S4ugesdPUqz1la-E9beCTAAQKtAyxYntOEcI9AOzYQx6CvUuYyIFWz9EU73ds6iWC4OTWsdJVJJuDvgofU46gemQItQj5FNJRvz3MBsaQm3zWxTjP6okOKPBvqip41iDBabo19IkF3mqYMDytfl-lMWJ_Qc2daUklk2aYIc0EcoNKQFT3IJnujqG3hJhzYKLbHbm1ejlBDamkib_qOi4bc_Bo3onH5tlJQxT4W_NmwoGeD61rtwJWqlnt5Mo39yNbzj9jiuTAoDx9igbKYdL8oJkVcOAMSgRIytWvu8LKxUyb-okeTVuqQDmOtIn0ycW_ZZzX9MYbUzDp2CCRB4C7w',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36',
+        'origin': 'https://www.ford.com.cn',
+        'application-id': '05F9DDAA-6C8F-48FB-A7A2-475D2C585900',
+        'Referer': 'https://www.ford.com.cn/locate-a-dealer/'}
+
+    url = 'https://cn.api.mps.ford.com.cn/api/dsl/utility/v1/dealer/ford/local?center=116.4133836971231,39.910924547299565&city=%E5%8C%97%E4%BA%AC'
+    resource_data = requests.get(url=url, headers=headers)
+    print(resource_data.text)
+    dict_data = json.loads(resource_data.text)
+    print(dict_data)
+
+def get_headers():
+    url = "https://www.ford.com.cn/locate-a-dealer/"
+    file = urllib.request.urlopen(url)
+    # print('获取当前url:',file.geturl() )
+    # print('file.getcode,HTTPResponse类型:',file.getcode )
+    # print('file.info 返回当前环境相关的信息：' ,file.info())
+    print(file.headers)
+
+
+# 获取到每一个城市对应的区域的经纬度 lng 和 lat
+def get_lbs():
+    # 获取所有要查询的市、区
+    result = MysqlUtil.select_area()
+    data = pd.DataFrame(result)
+    # print(data[0][0])
+    url = "https://restapi.amap.com/v3/geocode/geo?key=84b31c0b9ebe60f23788d6b6f0c96aa5&address="
+    city_location = []
+    for i in range(len(data[0])):
+        # 拼接上市区
+        new_url = url + data[0][i]
+        # 获取内容
+        req = requests.get(url=new_url, verify=False)
+        str = req.text
+        # 将内容转化为字典形式
+        dick_data = json.loads(str)
+        print(dick_data)
+        # 过滤只有是市、区的数据
+        if dick_data['count'] == '1' and (
+                dick_data['geocodes'][0]['level'] == '市' or dick_data['geocodes'][0]['level'] == '区县'):
+            city_location.append(dick_data)
+    # print(dick_data['geocodes'][0]['location'])
+    return city_location
+

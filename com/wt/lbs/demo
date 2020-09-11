@@ -1,0 +1,40 @@
+{
+    "_id": {"$oid": "5f51dab03a7dd915d0be8de2"},  // key值
+    "old_id": "44021", // null
+    "name": "上海金旋铃铃汽车销售服务有限公司", // 名称
+    "location": [121.442588, 30.95778],
+    "type": "", // null
+    "address": "上海市奉贤区肖塘镇沪杭公路1058号（近大叶公路）", // 地址
+    "phone": "销售:021-57432116;服务：021-62176667", // 电话取一个
+    "postcode": "200140", // 表格中的邮政编码
+    "pname": "上海市", // 省份
+    "pcode": "310000", //
+    "cityname": "上海市",  // 可获取
+    "citycode": "310100", // 不可获取
+    "adname": "奉贤区", // 可获取
+    "adcode": "310120", // 可获取
+    "email": "mailto:shjl@jmc.com.cn",
+    "salesPhoneNum": "021-57432116",
+    "dealerAffiliation": "江铃汽车福特品牌经销商",// null
+    "serviceHistoryID": "", // null
+    "saleshours": "08:00,17:00;08:00,17:00;08:00,17:00;08:00,17:00;08:00,17:00;08:00,17:00;08:00,17:00", // null
+    "administrativeArea": "上海",// null
+    "eDaijiaCustomerID": "", // null
+    "servicehours": "08:00,17:00;08:00,17:00;08:00,17:00;08:00,17:00;08:00,17:00;08:00,17:00;08:00,17:00",// null
+    "primaryPhone": "销售:021-57432116;服务：021-62176667",// 电话取一个
+    "localcity": "上海", // city
+    "OSBDealerID": "", //DealerID
+    "weiboURL": "", // null
+    "OSBPhone": "", // 电话取一个
+    "servicePhoneNumber": "021-62176667",  // 电话取一个
+    "dealerNewVehicle": "福特新世代全顺,福特新全顺,福特途睿欧,全新福特撼路者,全新福特领界",// null
+    "eDaijiaPhone": "",// null
+    "weChatUrl": "",// null
+    "eDaijiaFlag": "",// null
+    "JVFlag": "JMC",// null
+    "fax": "021-65931838",// 电话取一个
+    "createtime": "2020-03-09 22:04:14",
+    "updatetime": "2020-03-09 22:04:14",
+    "dealerId": "1108101A",//DealerID
+    "_class": "com.autopai.poi.model.mongo.FordWebsiteSales"// null
+}
