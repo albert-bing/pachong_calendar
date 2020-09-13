@@ -105,7 +105,7 @@ def month_data_insert_for_one_year(year_num, fe_num):
         else:
             mdata = get_month_data(month_days_31, str_month, year)
         # 插入数据库 一个月插入一次
-        MysqlUtil.insert_data_yellow_calendar(mdata)
+        # MysqlUtil.insert_data_yellow_calendar(mdata)
         print("行号【97】"+year + " " + str_month + "数据插入成功！")
         # 暂停2秒
         time.sleep(2)
@@ -138,4 +138,4 @@ if __name__ == '__main__':
     str2 = '201012'
     m_data = get_month_data(days,str1,str2)
     print(m_data)
-    MysqlUtil.insert_data_yellow_calendar(m_data)
+    # MysqlUtil.insert_data_yellow_calendar(m_data)

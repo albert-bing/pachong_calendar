@@ -10,9 +10,9 @@
 #  start your code
 
 # myself
-# _CHROME_DRIVER_WIN = 'F:/software/chromedriver.exe'
+_CHROME_DRIVER_WIN = 'F:/software/chromedriver.exe'
 # company
-_CHROME_DRIVER_WIN = 'D:/softInstall/chromedriver.exe'
+# _CHROME_DRIVER_WIN = 'D:/softInstall/chromedriver.exe'
 
 # chromedriver执行文件地址 linux
 # _CHROME_DRIVER_LINUX = '/home/hadoop/soft/crawler_tools/chromedriver'
