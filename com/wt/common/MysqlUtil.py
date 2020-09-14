@@ -9,7 +9,6 @@
 
 import pymysql
 
-
 # 黄历数据入库
 def insert_data_yellow_calendar(data):
     db = pymysql.connect(host='bigdata06', user='root', password='wutong123', port=3306, db='traffic')

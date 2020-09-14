@@ -13,11 +13,11 @@ import logging
 import pandas as pd
 import urllib3
 import json
-from com.wt.common import MysqlUtil
+from com.wt.common import MongodbUtil
 import requests
 import paramiko
 import time
-
+import pymongo
 # 忽略https的安全警告
 urllib3.disable_warnings()
 
@@ -65,7 +65,7 @@ def get_log_lat(data):
         resource_data = requests.get(url=url, verify=False)
         try:
             if json.loads(resource_data.text)['count'] == '0' and data[i][4] != 'test':
-                print(data[i][4] + "------" + resource_data.text)
+                # print(data[i][4] + "------" + resource_data.text)
                 back_data.append(data[i])
             elif data[i][4] != 'test':
                 geo_data1.append(resource_data.text + "&&" + ",".join(data[i]))
@@ -82,7 +82,7 @@ def get_log_lat(data):
         if json.loads(resource_data1.text)['count'] == '0':
             num += 1
             re_data.append(back_data[j])
-            print(back_data[j][4] + "==" + resource_data1.text)
+            # print(back_data[j][4] + "==" + resource_data1.text)
         else:
             geo_data2.append(resource_data1.text + "&&" + ",".join(back_data[j]))
     print("+++++++++++++++++++++++++++++++++++++++++")
@@ -115,15 +115,31 @@ def get_log_lat_baidu(data):
 # 将获取的三部分数据进行处理，形成统一的数据格式
 def analysis_data(n, an_data):
     re_data = []
+    back_data = []
     # 处理高德第一次返回的数据
     if n == 1:
         for i in range(0, len(an_data), 1):
             one_data = get_geo_data1(an_data[i])
-            re_data.append(one_data)
+            if "-1" == one_data:
+                r_data = an_data[i].split("&&")[1].split(",")
+                back_data.append(r_data)
+            else:
+                re_data.append(one_data)
+        t_data = get_log_lat_baidu(back_data)
+        for j in range(0,len(t_data),1):
+            r_data = get_geo_data3(t_data[j])
+            re_data.append(r_data)
     # 处理高德第二次返回的数据
     elif n == 2:
         for i in range(0, len(an_data), 1):
             one_data = get_geo_data2(an_data[i])
+        #     if "-1" == one_data:
+        #         r_data = an_data[i].split("&&")[1].split(",")
+        #         back_data.append(r_data)
+        #     else:
+        #         re_data.append(one_data)
+        # t_data = get_log_lat_baidu(back_data)
+        # re_data.append(t_data)
             re_data.append(one_data)
     # 处理百度返回的数据
     else:
@@ -139,51 +155,12 @@ def get_geo_data1(data):
         将从远程获取的经销商的信息和从高德获取的信息合并之后再次分开,其中list_data[0]表示高德获取的信息，list_data[1]表示远程文件获取的
     """
     list_data = data.split("&&")
-    print(data)
     # 把从高德获取的信息转化为字典
     data1 = json.loads(list_data[0])
+    if [] == data1['geocodes'][0]['district'] or [] == data1['geocodes'][0]['city']:
+        return "-1"
     # 把从远程文件获取的信息转化为数组
     data2 = list_data[1].split(",")
-    """:arg
-         "_id": {"$oid": "5f51dab03a7dd915d0be8de2"},  // key值
-        "old_id": "44021", // null
-        "name": "上海金旋铃铃汽车销售服务有限公司", // 名称
-        "location": [121.442588, 30.95778],
-        "type": "", // null
-        "address": "上海市奉贤区肖塘镇沪杭公路1058号（近大叶公路）", // 地址
-        "phone": "销售:021-57432116;服务：021-62176667", // 电话取一个
-        "postcode": "200140", // 表格中的邮政编码
-        "pname": "上海市", // 省份
-        "pcode": "310000", //
-        "cityname": "上海市",  // 可获取
-        "citycode": "310100", // 不可获取
-        "adname": "奉贤区", // 可获取
-        "adcode": "310120", // 可获取
-        "email": "mailto:shjl@jmc.com.cn",
-        "salesPhoneNum": "021-57432116",
-        "dealerAffiliation": "江铃汽车福特品牌经销商",// null
-        "serviceHistoryID": "", // null
-        "saleshours": "08:00,17:00;08:00,17:00;08:00,17:00;08:00,17:00;08:00,17:00;08:00,17:00;08:00,17:00", // null
-        "administrativeArea": "上海",// null
-        "eDaijiaCustomerID": "", // null
-        "servicehours": "08:00,17:00;08:00,17:00;08:00,17:00;08:00,17:00;08:00,17:00;08:00,17:00;08:00,17:00",// null
-        "primaryPhone": "销售:021-57432116;服务：021-62176667",// 电话取一个
-        "localcity": "上海", // city
-        "OSBDealerID": "", //DealerID
-        "weiboURL": "", // null
-        "OSBPhone": "", // 电话取一个
-        "servicePhoneNumber": "021-62176667",  // 电话取一个
-        "dealerNewVehicle": "福特新世代全顺,福特新全顺,福特途睿欧,全新福特撼路者,全新福特领界",// null
-        "eDaijiaPhone": "",// null
-        "weChatUrl": "",// null
-        "eDaijiaFlag": "",// null
-        "JVFlag": "JMC",// null
-        "fax": "021-65931838",// 电话取一个
-        "createtime": "2020-03-09 22:04:14",
-        "updatetime": "2020-03-09 22:04:14",
-        "dealerId": "1108101A",//DealerID
-        "_class": "com.autopai.poi.model.mongo.FordWebsiteSales"// null
-    """
     # old_id、添加 name、 添加location（经纬度）、 添加type为null、 添加address
     # 添加phone exp:"销售:021-57432116;服务：021-62176667",获取postcode、 获取省份
     one_data = ["", data2[4], data1['geocodes'][0]['location'], "", data2[10], "销售：" + data2[13] + ";服务：" + data2[12],
@@ -260,48 +237,10 @@ def get_geo_data2(data):
     list_data = data.split("&&")
     # 把从高德获取的信息转化为字典
     data1 = json.loads(list_data[0])
+    # if [] == data1['geocodes'][0]['district'] or [] == data1['geocodes'][0]['city']:
+    #     return "-1"
     # 把从远程文件获取的信息转化为数组
     data2 = list_data[1].split(",")
-    """:arg
-         "_id": {"$oid": "5f51dab03a7dd915d0be8de2"},  // key值
-        "old_id": "44021", // null
-        "name": "上海金旋铃铃汽车销售服务有限公司", // 名称
-        "location": [121.442588, 30.95778],
-        "type": "", // null
-        "address": "上海市奉贤区肖塘镇沪杭公路1058号（近大叶公路）", // 地址
-        "phone": "销售:021-57432116;服务：021-62176667", // 电话取一个
-        "postcode": "200140", // 表格中的邮政编码
-        "pname": "上海市", // 省份
-        "pcode": "310000", //
-        "cityname": "上海市",  // 可获取
-        "citycode": "310100", // 不可获取
-        "adname": "奉贤区", // 可获取
-        "adcode": "310120", // 可获取
-        "email": "mailto:shjl@jmc.com.cn",
-        "salesPhoneNum": "021-57432116",
-        "dealerAffiliation": "江铃汽车福特品牌经销商",// null
-        "serviceHistoryID": "", // null
-        "saleshours": "08:00,17:00;08:00,17:00;08:00,17:00;08:00,17:00;08:00,17:00;08:00,17:00;08:00,17:00", // null
-        "administrativeArea": "上海",// null
-        "eDaijiaCustomerID": "", // null
-        "servicehours": "08:00,17:00;08:00,17:00;08:00,17:00;08:00,17:00;08:00,17:00;08:00,17:00;08:00,17:00",// null
-        "primaryPhone": "销售:021-57432116;服务：021-62176667",// 电话取一个
-        "localcity": "上海", // city
-        "OSBDealerID": "", //DealerID
-        "weiboURL": "", // null
-        "OSBPhone": "", // 电话取一个
-        "servicePhoneNumber": "021-62176667",  // 电话取一个
-        "dealerNewVehicle": "福特新世代全顺,福特新全顺,福特途睿欧,全新福特撼路者,全新福特领界",// null
-        "eDaijiaPhone": "",// null
-        "weChatUrl": "",// null
-        "eDaijiaFlag": "",// null
-        "JVFlag": "JMC",// null
-        "fax": "021-65931838",// 电话取一个
-        "createtime": "2020-03-09 22:04:14",
-        "updatetime": "2020-03-09 22:04:14",
-        "dealerId": "1108101A",//DealerID
-        "_class": "com.autopai.poi.model.mongo.FordWebsiteSales"// null
-    """
     # old_id、添加 name、 添加location（经纬度）、 添加type为null、 添加address
     # 添加phone exp:"销售:021-57432116;服务：021-62176667",获取postcode、 获取省份
     one_data = ["", data2[4], data1['pois'][0]['location'], "", data2[10], "销售：" + data2[13] + ";服务：" + data2[12],
@@ -374,51 +313,10 @@ def get_geo_data3(data):
         将从远程获取的经销商的信息和从高德获取的信息合并之后再次分开,其中list_data[0]表示高德获取的信息，list_data[1]表示远程文件获取的
     """
     list_data = data.split("&&")
-    print(data)
     # 把从高德获取的信息转化为字典
     data1 = json.loads(list_data[0])
     # 把从远程文件获取的信息转化为数组
     data2 = list_data[1].split(",")
-    """:arg
-         "_id": {"$oid": "5f51dab03a7dd915d0be8de2"},  // key值
-        "old_id": "44021", // null
-        "name": "上海金旋铃铃汽车销售服务有限公司", // 名称
-        "location": [121.442588, 30.95778],
-        "type": "", // null
-        "address": "上海市奉贤区肖塘镇沪杭公路1058号（近大叶公路）", // 地址
-        "phone": "销售:021-57432116;服务：021-62176667", // 电话取一个
-        "postcode": "200140", // 表格中的邮政编码
-        "pname": "上海市", // 省份
-        "pcode": "310000", //
-        "cityname": "上海市",  // 可获取
-        "citycode": "310100", // 不可获取
-        "adname": "奉贤区", // 可获取
-        "adcode": "310120", // 可获取
-        "email": "mailto:shjl@jmc.com.cn",
-        "salesPhoneNum": "021-57432116",
-        "dealerAffiliation": "江铃汽车福特品牌经销商",// null
-        "serviceHistoryID": "", // null
-        "saleshours": "08:00,17:00;08:00,17:00;08:00,17:00;08:00,17:00;08:00,17:00;08:00,17:00;08:00,17:00", // null
-        "administrativeArea": "上海",// null
-        "eDaijiaCustomerID": "", // null
-        "servicehours": "08:00,17:00;08:00,17:00;08:00,17:00;08:00,17:00;08:00,17:00;08:00,17:00;08:00,17:00",// null
-        "primaryPhone": "销售:021-57432116;服务：021-62176667",// 电话取一个
-        "localcity": "上海", // city
-        "OSBDealerID": "", //DealerID
-        "weiboURL": "", // null
-        "OSBPhone": "", // 电话取一个
-        "servicePhoneNumber": "021-62176667",  // 电话取一个
-        "dealerNewVehicle": "福特新世代全顺,福特新全顺,福特途睿欧,全新福特撼路者,全新福特领界",// null
-        "eDaijiaPhone": "",// null
-        "weChatUrl": "",// null
-        "eDaijiaFlag": "",// null
-        "JVFlag": "JMC",// null
-        "fax": "021-65931838",// 电话取一个
-        "createtime": "2020-03-09 22:04:14",
-        "updatetime": "2020-03-09 22:04:14",
-        "dealerId": "1108101A",//DealerID
-        "_class": "com.autopai.poi.model.mongo.FordWebsiteSales"// null
-    """
     # old_id、
     one_data = [""]
     # 添加 name、
@@ -501,22 +399,56 @@ def get_geo_data3(data):
     return one_data
 
 
+# 保存数据
+def save(data):
+    result_data = []
+    for i in range(0,len(data),1):
+        d = data[i]
+        try:
+            re_data = '{"old_id":"' + d[0] + '","name":"' + d[1] + '","location":[' + d[2] + '],"type":"' + d[3] + '","address":"' + d[4] + '","phone":"' + d[5] + '"' \
+                      ',"postcode":"' + d[6] + '","pname":"' + d[7] + '","pcode":"' + d[8] + '","cityname":"' + d[9] + '","citycode":"' + d[10] + '"' \
+                      ',"adname":"' + d[11] + '","adcode":"' + d[12] + '","email":"' + d[13] + '","salesPhoneNum":"' + d[14] + '","dealerAffiliation":"' + d[15] + '",' \
+                      '"serviceHistoryID":"' + d[16] + '","saleshours":"' + d[17] + '","administrativeArea":"' + d[18] + '","eDaijiaCustomerID":"' + d[19] + '",' \
+                      '"servicehours":"' + d[20] + '","primaryPhone":"' + d[21] + '","localcity":"' + d[22] + '","OSBDealerID":"' + d[23] + '","weiboURL":"' + d[24] + '"' \
+                      ',"OSBPhone":"' + d[25] + '","servicePhoneNumber":"' + d[26] + '","dealerNewVehicle":"' + d[27] + '","eDaijiaPhone":"' + d[28] + '","weChatUrl":"' + d[29] + '"' \
+                      ',"eDaijiaFlag":"' + d[30] + '","JVFlag":"' + d[31] + '","fax":"' + d[32] + '","createtime":"' + d[33] + '","updatetime":"' + d[34] + '","dealerId":"' + d[35] + '","_class":"' + d[36] + '"}'
+            result_data.append(re_data)
+        except Exception as res:
+            print("抛出异常：")
+            print(data[i])
+            print(res)
+    # 保存数据
+    MongodbUtil.isnert_data_ford(result_data)
+
 if __name__ == '__main__':
     # 从远程的csv获取数据
     data = get_csv()
+
     # re_data:在高德请求剩余的数据，geo_data1：第一次高德请求到的数据，geo_data2：第二次高德请求到的数据
     re_data, geo_data1, geo_data2 = get_log_lat(data)
     # 去百度地图获取经纬度,拿到返回的数据
     du_data = get_log_lat_baidu(re_data)
 
+
+
+
     # 处理高德第一次返回的数据
+    print("geo_data1:%d"%len(geo_data1))
     result_data1 = analysis_data(1, geo_data1)
+    print("result_data1:%d"%len(result_data1))
     # 处理高德第二次返回的数据
+    print("geo_data2:%d"%len(geo_data2))
     result_data2 = analysis_data(2, geo_data2)
+    print("result_data2:%d"%len(result_data2))
     # 处理百度返回的数据
+    print("geo_data3:%d"%len(du_data))
     result_data3 = analysis_data(3, du_data)
+    print("result_data3:%d"%len(result_data3))
     # 将处理好的三个数据进行合并
     result_data = result_data1 + result_data2 + result_data3
 
-    print(result_data)
+    # 向mongodb插入数据
+    save(result_data)
+
+
 
