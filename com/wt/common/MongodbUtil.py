@@ -13,8 +13,17 @@ import pymongo
 
 # 将数据插入到mongodb中
 def isnert_data_ford(result_data):
-    myclient = pymongo.MongoClient('mongodb://root:autopai123@172.27.0.12:27017/poi?authSource=admin')
-    dblist = myclient['poi']
-    mycol = dblist['ford_website_sales']
+    # myclient = pymongo.MongoClient(host='129.28.93.48', port=27017)
+    # db = myclient.admin
+    # db.authenticate("root", "autopai123")
+    # my_db = myclient.poi
+    # mycol = my_db.ford_website_sales
+    print("数据开始插入......")
+    myclient = pymongo.MongoClient(host='129.28.93.48', port=27017)
+    db = myclient.admin
+    db.authenticate("root", "autopai123")
+    my_db = myclient.poi
+    mycol = my_db.ford_website_sales
     for i in range(0, len(result_data), 1):
         mycol.insert_one(eval(result_data[i]))
+    print("数据插入完成！！")

@@ -71,7 +71,7 @@ def get_log_lat(data):
                 geo_data1.append(resource_data.text + "&&" + ",".join(data[i]))
         except Exception as result:
             print("++++++" + data[i][4] + "+++++++" + result)
-    print("-------------------------------------------------------")
+    print("----------------------高德第一部分数据获取完成---------------------------------")
 
     # 需要百度地图解析的经销商
     re_data = []
@@ -85,7 +85,7 @@ def get_log_lat(data):
             # print(back_data[j][4] + "==" + resource_data1.text)
         else:
             geo_data2.append(resource_data1.text + "&&" + ",".join(back_data[j]))
-    print("+++++++++++++++++++++++++++++++++++++++++")
+    print("----------------------高德第二部分数据获取完成---------------------------------")
     return re_data, geo_data1, geo_data2
 
 
@@ -109,6 +109,7 @@ def get_log_lat_baidu(data):
         url = "http://api.map.baidu.com/reverse_geocoding/v3/?ak=d0FaYLZV11VDUPifOWdSPsItnIvBkKeR&output=json&coordtype=wgs84ll&location="+str(lat)+","+str(lng)
         resource_data = requests.get(url=url,verify=False)
         re_data.append(resource_data.text + "&&" + ",".join(data[h]))
+    print("----------------------百度部分数据获取完成---------------------------------")
     return re_data
 
 
@@ -429,9 +430,7 @@ if __name__ == '__main__':
     # 去百度地图获取经纬度,拿到返回的数据
     du_data = get_log_lat_baidu(re_data)
 
-
-
-
+    print("----------------------获取数据量统计---------------------------------")
     # 处理高德第一次返回的数据
     print("geo_data1:%d"%len(geo_data1))
     result_data1 = analysis_data(1, geo_data1)
