@@ -201,7 +201,7 @@ def get_geo_data1(data):
     # 添加 localcity
     one_data.append(data1['geocodes'][0]['city'])
     # 添加 OSBDealerID
-    one_data.append(data2[0])
+    one_data.append(data2[2])
     # 添加 weiboURL
     one_data.append("")
     # 添加 OSBPhone 和 servicePhoneNumber
@@ -279,7 +279,7 @@ def get_geo_data2(data):
     # 添加 localcity
     one_data.append(data1['pois'][0]['cityname'])
     # 添加 OSBDealerID
-    one_data.append(data2[0])
+    one_data.append(data2[2])
     # 添加 weiboURL
     one_data.append("")
     # 添加 OSBPhone 和 servicePhoneNumber
@@ -371,7 +371,7 @@ def get_geo_data3(data):
     # 添加 localcity
     one_data.append(data1['result']['addressComponent']['city'])
     # 添加 OSBDealerID
-    one_data.append(data2[0])
+    one_data.append(data2[2])
     # 添加 weiboURL
     one_data.append("")
     # 添加 OSBPhone 和 servicePhoneNumber
@@ -445,6 +445,8 @@ if __name__ == '__main__':
     print("result_data3:%d"%len(result_data3))
     # 将处理好的三个数据进行合并
     result_data = result_data1 + result_data2 + result_data3
+
+    print(result_data[0])
 
     # 向mongodb插入数据
     save(result_data)

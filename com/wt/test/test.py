@@ -173,7 +173,17 @@ def get_geo_data3(data):
 
 if __name__ == '__main__':
     myclient = pymongo.MongoClient(host='localhost',port=27017)
-    my_db = myclient.poi
-    mycol = my_db.ford_website_sales1
-    mycol.insert_one({"name":"zhangsan","age":18})
+    my_db = myclient.testdb
+    res = my_db.Person.drop()
+    print(res)
 
+
+    # myclient = pymongo.MongoClient(host='129.28.93.48', port=27017)
+    # db = myclient.admin
+    # db.authenticate("root", "autopai123")
+    # my_db = myclient.poi
+    # # mycol = my_db.ford_website_sales
+    # my_cols = my_db.list_collection_names()
+    # if "ford_website_sales2" in my_cols:
+    #     result = my_db["ford_website_sales2"].rename("ford_website_sales1")
+    # print(result)
