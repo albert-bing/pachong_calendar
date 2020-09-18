@@ -7,33 +7,44 @@
 
 
 #  start your code
-
+import logging
 import pymongo
+from pymongo import GEO2D
 
-
-# 将数据插入到mongodb中
-def isnert_data_ford(result_data):
-    # myclient = pymongo.MongoClient(host='129.28.93.48', port=27017)
-    # db = myclient.admin
-    # db.authenticate("root", "autopai123")
-    # my_db = myclient.poi
-    # mycol = my_db.ford_website_sales
-    print("数据开始插入......")
+# 更新数据
+def update_data_ford(result_data):
+    logging.info("数据开始更新.....")
     myclient = pymongo.MongoClient(host='129.28.93.48', port=27017)
     db = myclient.admin
     db.authenticate("root", "autopai123")
     my_db = myclient.poi
-    # 首先要删除上一个备份的集合
-    my_cols = my_db.list_collection_names()
-    if "ford_website_sales_bak_last" in my_cols:
-        # 删除集合
-        my_db.ford_website_sales2.drop()
-        print("文件已删除！")
-    # 将现在的文件备份
-    my_db["ford_website_sales"].rename("ford_website_sales_bak_last")
-    print("文件备份已完成！")
-    # 生成新的文件
     mycol = my_db.ford_website_sales
     for i in range(0, len(result_data), 1):
         mycol.insert_one(eval(result_data[i]))
-    print("数据插入完成！！")
+    mycol.create_index([("location", GEO2D)], name='location')
+    logging.info("数据更新完成！！")
+
+
+# 移除消失的经销商
+def remove_fords_data(data):
+    logging.info("数据开始移除.....")
+    myclient = pymongo.MongoClient(host='129.28.93.48', port=27017)
+    db = myclient.admin
+    db.authenticate("root", "autopai123")
+    my_db = myclient.poi
+    mycol = my_db.ford_website_sales
+    for i in range(0, len(data), 1):
+        mycol.delete_one({'name': data[i]['name']})
+    logging.info("数据移除完成！！")
+
+
+# 查询所有已存好的数据
+def select_fords_all():
+    myclient = pymongo.MongoClient(host='129.28.93.48', port=27017)
+    db = myclient.admin
+    db.authenticate("root", "autopai123")
+    my_db = myclient.poi
+    mycol = my_db.ford_website_sales
+    data_all = mycol.find()
+    count = mycol.count()
+    return data_all, count

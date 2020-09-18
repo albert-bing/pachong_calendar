@@ -1,0 +1,119 @@
+DEBUG:paramiko.transport:starting thread (client mode): 0x5c245fc8
+DEBUG:paramiko.transport:Local version/idstring: SSH-2.0-paramiko_2.7.2
+DEBUG:paramiko.transport:Remote version/idstring: SSH-2.0-OpenSSH_7.4
+INFO:paramiko.transport:Connected (version 2.0, client OpenSSH_7.4)
+DEBUG:paramiko.transport:kex algos:['curve25519-sha256', 'curve25519-sha256@libssh.org', 'ecdh-sha2-nistp256', 'ecdh-sha2-nistp384', 'ecdh-sha2-nistp521', 'diffie-hellman-group-exchange-sha256', 'diffie-hellman-group16-sha512', 'diffie-hellman-group18-sha512', 'diffie-hellman-group-exchange-sha1', 'diffie-hellman-group14-sha256', 'diffie-hellman-group14-sha1', 'diffie-hellman-group1-sha1'] server key:['ssh-rsa', 'rsa-sha2-512', 'rsa-sha2-256', 'ecdsa-sha2-nistp256', 'ssh-ed25519'] client encrypt:['chacha20-poly1305@openssh.com', 'aes128-ctr', 'aes192-ctr', 'aes256-ctr', 'aes128-gcm@openssh.com', 'aes256-gcm@openssh.com', 'aes128-cbc', 'aes192-cbc', 'aes256-cbc', 'blowfish-cbc', 'cast128-cbc', '3des-cbc'] server encrypt:['chacha20-poly1305@openssh.com', 'aes128-ctr', 'aes192-ctr', 'aes256-ctr', 'aes128-gcm@openssh.com', 'aes256-gcm@openssh.com', 'aes128-cbc', 'aes192-cbc', 'aes256-cbc', 'blowfish-cbc', 'cast128-cbc', '3des-cbc'] client mac:['umac-64-etm@openssh.com', 'umac-128-etm@openssh.com', 'hmac-sha2-256-etm@openssh.com', 'hmac-sha2-512-etm@openssh.com', 'hmac-sha1-etm@openssh.com', 'umac-64@openssh.com', 'umac-128@openssh.com', 'hmac-sha2-256', 'hmac-sha2-512', 'hmac-sha1'] server mac:['umac-64-etm@openssh.com', 'umac-128-etm@openssh.com', 'hmac-sha2-256-etm@openssh.com', 'hmac-sha2-512-etm@openssh.com', 'hmac-sha1-etm@openssh.com', 'umac-64@openssh.com', 'umac-128@openssh.com', 'hmac-sha2-256', 'hmac-sha2-512', 'hmac-sha1'] client compress:['none', 'zlib@openssh.com'] server compress:['none', 'zlib@openssh.com'] client lang:[''] server lang:[''] kex follows?False
+DEBUG:paramiko.transport:Kex agreed: curve25519-sha256@libssh.org
+DEBUG:paramiko.transport:HostKey agreed: ssh-ed25519
+DEBUG:paramiko.transport:Cipher agreed: aes128-ctr
+DEBUG:paramiko.transport:MAC agreed: hmac-sha2-256
+DEBUG:paramiko.transport:Compression agreed: none
+DEBUG:paramiko.transport:kex engine KexCurve25519 specified hash_algo <built-in function openssl_sha256>
+DEBUG:paramiko.transport:Switch to new keys ...
+DEBUG:paramiko.transport:Adding ssh-ed25519 host key for [120.26.146.183]:6143: b'03894e14dcae3a7103aa3cd74d2a0fb1'
+DEBUG:paramiko.transport:Trying discovered key b'2d5d17f9c4168ec8f59e5cd9252b2b34' in C:\Users\Administrator/.ssh/id_rsa
+DEBUG:paramiko.transport:userauth is OK
+INFO:paramiko.transport:Authentication (publickey) failed.
+DEBUG:paramiko.transport:userauth is OK
+INFO:paramiko.transport:Authentication (password) successful!
+DEBUG:paramiko.transport:[chan 0] Max packet in: 32768 bytes
+DEBUG:paramiko.transport:Received global request "hostkeys-00@openssh.com"
+DEBUG:paramiko.transport:Rejecting "hostkeys-00@openssh.com" global request from server.
+DEBUG:paramiko.transport:[chan 0] Max packet out: 32768 bytes
+DEBUG:paramiko.transport:Secsh channel 0 opened.
+DEBUG:paramiko.transport:[chan 0] Sesch channel 0 request ok
+INFO:paramiko.transport.sftp:[chan 0] Opened sftp connection (server version 3)
+INFO:root:<paramiko.sftp_client.SFTPClient object at 0x0000013E5C24B8C8>
+DEBUG:paramiko.transport.sftp:[chan 0] open(b'/fm02/DMS-FM-DFM02-20200918-01.csv', 'r')
+DEBUG:paramiko.transport.sftp:[chan 0] open(b'/fm02/DMS-FM-DFM02-20200918-01.csv', 'r') -> 00000000
+DEBUG:paramiko.transport.sftp:[chan 0] close(00000000)
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): api.map.baidu.com:80
+DEBUG:urllib3.connectionpool:http://api.map.baidu.com:80 "GET /geocoding/v3/?address=%E6%AD%A6%E6%B1%89%E5%A8%81%E6%B1%89%E6%B1%BD%E8%BD%A6%E9%94%80%E5%94%AE%E6%9C%89%E9%99%90%E8%B4%A3%E4%BB%BB%E5%85%AC%E5%8F%B8%E4%BB%99%E6%A1%83%E5%88%86%E5%85%AC%E5%8F%B8&ak=bRKF4EQsu45sSBqVYH4G9LykCwI2W6KD&output=json HTTP/1.1" 200 157
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): api.map.baidu.com:80
+DEBUG:urllib3.connectionpool:http://api.map.baidu.com:80 "GET /geocoding/v3/?address=test&ak=bRKF4EQsu45sSBqVYH4G9LykCwI2W6KD&output=json HTTP/1.1" 200 92
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): api.map.baidu.com:80
+DEBUG:urllib3.connectionpool:http://api.map.baidu.com:80 "GET /reverse_geocoding/v3/?ak=bRKF4EQsu45sSBqVYH4G9LykCwI2W6KD&output=json&coordtype=wgs84ll&location=30.554356902308612,114.2115529904325 HTTP/1.1" 200 384
+INFO:root:----------------------百度部分数据获取完成---------------------------------
+INFO:root:==========第一次获取数据**开始**==========
+INFO:root:==========第一次获取数据**结束**==========
+INFO:root:==========第二次获取数据**开始**==========
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): api.map.baidu.com:80
+DEBUG:urllib3.connectionpool:http://api.map.baidu.com:80 "GET /geocoding/v3/?address=test&ak=bRKF4EQsu45sSBqVYH4G9LykCwI2W6KD&output=json HTTP/1.1" 200 92
+INFO:root:----------------------百度部分数据获取完成---------------------------------
+INFO:root:==========第二次获取数据**结束**==========
+INFO:root:result_data3:1
+INFO:root:数据开始更新.....
+INFO:root:数据更新完成！！
+INFO:root:程序运行完成
+DEBUG:paramiko.transport:EOF in transport thread
+DEBUG:paramiko.transport:starting thread (client mode): 0xdbfdef88
+DEBUG:paramiko.transport:Local version/idstring: SSH-2.0-paramiko_2.7.2
+DEBUG:paramiko.transport:Remote version/idstring: SSH-2.0-OpenSSH_7.4
+INFO:paramiko.transport:Connected (version 2.0, client OpenSSH_7.4)
+DEBUG:paramiko.transport:kex algos:['curve25519-sha256', 'curve25519-sha256@libssh.org', 'ecdh-sha2-nistp256', 'ecdh-sha2-nistp384', 'ecdh-sha2-nistp521', 'diffie-hellman-group-exchange-sha256', 'diffie-hellman-group16-sha512', 'diffie-hellman-group18-sha512', 'diffie-hellman-group-exchange-sha1', 'diffie-hellman-group14-sha256', 'diffie-hellman-group14-sha1', 'diffie-hellman-group1-sha1'] server key:['ssh-rsa', 'rsa-sha2-512', 'rsa-sha2-256', 'ecdsa-sha2-nistp256', 'ssh-ed25519'] client encrypt:['chacha20-poly1305@openssh.com', 'aes128-ctr', 'aes192-ctr', 'aes256-ctr', 'aes128-gcm@openssh.com', 'aes256-gcm@openssh.com', 'aes128-cbc', 'aes192-cbc', 'aes256-cbc', 'blowfish-cbc', 'cast128-cbc', '3des-cbc'] server encrypt:['chacha20-poly1305@openssh.com', 'aes128-ctr', 'aes192-ctr', 'aes256-ctr', 'aes128-gcm@openssh.com', 'aes256-gcm@openssh.com', 'aes128-cbc', 'aes192-cbc', 'aes256-cbc', 'blowfish-cbc', 'cast128-cbc', '3des-cbc'] client mac:['umac-64-etm@openssh.com', 'umac-128-etm@openssh.com', 'hmac-sha2-256-etm@openssh.com', 'hmac-sha2-512-etm@openssh.com', 'hmac-sha1-etm@openssh.com', 'umac-64@openssh.com', 'umac-128@openssh.com', 'hmac-sha2-256', 'hmac-sha2-512', 'hmac-sha1'] server mac:['umac-64-etm@openssh.com', 'umac-128-etm@openssh.com', 'hmac-sha2-256-etm@openssh.com', 'hmac-sha2-512-etm@openssh.com', 'hmac-sha1-etm@openssh.com', 'umac-64@openssh.com', 'umac-128@openssh.com', 'hmac-sha2-256', 'hmac-sha2-512', 'hmac-sha1'] client compress:['none', 'zlib@openssh.com'] server compress:['none', 'zlib@openssh.com'] client lang:[''] server lang:[''] kex follows?False
+DEBUG:paramiko.transport:Kex agreed: curve25519-sha256@libssh.org
+DEBUG:paramiko.transport:HostKey agreed: ssh-ed25519
+DEBUG:paramiko.transport:Cipher agreed: aes128-ctr
+DEBUG:paramiko.transport:MAC agreed: hmac-sha2-256
+DEBUG:paramiko.transport:Compression agreed: none
+DEBUG:paramiko.transport:kex engine KexCurve25519 specified hash_algo <built-in function openssl_sha256>
+DEBUG:paramiko.transport:Switch to new keys ...
+DEBUG:paramiko.transport:Adding ssh-ed25519 host key for [120.26.146.183]:6143: b'03894e14dcae3a7103aa3cd74d2a0fb1'
+DEBUG:paramiko.transport:Trying discovered key b'2d5d17f9c4168ec8f59e5cd9252b2b34' in C:\Users\Administrator/.ssh/id_rsa
+DEBUG:paramiko.transport:userauth is OK
+INFO:paramiko.transport:Authentication (publickey) failed.
+DEBUG:paramiko.transport:userauth is OK
+INFO:paramiko.transport:Authentication (password) successful!
+DEBUG:paramiko.transport:[chan 0] Max packet in: 32768 bytes
+DEBUG:paramiko.transport:Received global request "hostkeys-00@openssh.com"
+DEBUG:paramiko.transport:Rejecting "hostkeys-00@openssh.com" global request from server.
+DEBUG:paramiko.transport:[chan 0] Max packet out: 32768 bytes
+DEBUG:paramiko.transport:Secsh channel 0 opened.
+DEBUG:paramiko.transport:[chan 0] Sesch channel 0 request ok
+INFO:paramiko.transport.sftp:[chan 0] Opened sftp connection (server version 3)
+INFO:root:<paramiko.sftp_client.SFTPClient object at 0x000001F9DBD77C48>
+DEBUG:paramiko.transport.sftp:[chan 0] open(b'/fm02/DMS-FM-DFM02-20200918-01.csv', 'r')
+DEBUG:paramiko.transport.sftp:[chan 0] open(b'/fm02/DMS-FM-DFM02-20200918-01.csv', 'r') -> 00000000
+DEBUG:paramiko.transport.sftp:[chan 0] close(00000000)
+DEBUG:paramiko.transport:starting thread (client mode): 0x33e66f88
+DEBUG:paramiko.transport:Local version/idstring: SSH-2.0-paramiko_2.7.2
+DEBUG:paramiko.transport:Remote version/idstring: SSH-2.0-OpenSSH_7.4
+INFO:paramiko.transport:Connected (version 2.0, client OpenSSH_7.4)
+DEBUG:paramiko.transport:kex algos:['curve25519-sha256', 'curve25519-sha256@libssh.org', 'ecdh-sha2-nistp256', 'ecdh-sha2-nistp384', 'ecdh-sha2-nistp521', 'diffie-hellman-group-exchange-sha256', 'diffie-hellman-group16-sha512', 'diffie-hellman-group18-sha512', 'diffie-hellman-group-exchange-sha1', 'diffie-hellman-group14-sha256', 'diffie-hellman-group14-sha1', 'diffie-hellman-group1-sha1'] server key:['ssh-rsa', 'rsa-sha2-512', 'rsa-sha2-256', 'ecdsa-sha2-nistp256', 'ssh-ed25519'] client encrypt:['chacha20-poly1305@openssh.com', 'aes128-ctr', 'aes192-ctr', 'aes256-ctr', 'aes128-gcm@openssh.com', 'aes256-gcm@openssh.com', 'aes128-cbc', 'aes192-cbc', 'aes256-cbc', 'blowfish-cbc', 'cast128-cbc', '3des-cbc'] server encrypt:['chacha20-poly1305@openssh.com', 'aes128-ctr', 'aes192-ctr', 'aes256-ctr', 'aes128-gcm@openssh.com', 'aes256-gcm@openssh.com', 'aes128-cbc', 'aes192-cbc', 'aes256-cbc', 'blowfish-cbc', 'cast128-cbc', '3des-cbc'] client mac:['umac-64-etm@openssh.com', 'umac-128-etm@openssh.com', 'hmac-sha2-256-etm@openssh.com', 'hmac-sha2-512-etm@openssh.com', 'hmac-sha1-etm@openssh.com', 'umac-64@openssh.com', 'umac-128@openssh.com', 'hmac-sha2-256', 'hmac-sha2-512', 'hmac-sha1'] server mac:['umac-64-etm@openssh.com', 'umac-128-etm@openssh.com', 'hmac-sha2-256-etm@openssh.com', 'hmac-sha2-512-etm@openssh.com', 'hmac-sha1-etm@openssh.com', 'umac-64@openssh.com', 'umac-128@openssh.com', 'hmac-sha2-256', 'hmac-sha2-512', 'hmac-sha1'] client compress:['none', 'zlib@openssh.com'] server compress:['none', 'zlib@openssh.com'] client lang:[''] server lang:[''] kex follows?False
+DEBUG:paramiko.transport:Kex agreed: curve25519-sha256@libssh.org
+DEBUG:paramiko.transport:HostKey agreed: ssh-ed25519
+DEBUG:paramiko.transport:Cipher agreed: aes128-ctr
+DEBUG:paramiko.transport:MAC agreed: hmac-sha2-256
+DEBUG:paramiko.transport:Compression agreed: none
+DEBUG:paramiko.transport:kex engine KexCurve25519 specified hash_algo <built-in function openssl_sha256>
+DEBUG:paramiko.transport:Switch to new keys ...
+DEBUG:paramiko.transport:Adding ssh-ed25519 host key for [120.26.146.183]:6143: b'03894e14dcae3a7103aa3cd74d2a0fb1'
+DEBUG:paramiko.transport:Trying discovered key b'2d5d17f9c4168ec8f59e5cd9252b2b34' in C:\Users\Administrator/.ssh/id_rsa
+DEBUG:paramiko.transport:userauth is OK
+INFO:paramiko.transport:Authentication (publickey) failed.
+DEBUG:paramiko.transport:userauth is OK
+INFO:paramiko.transport:Authentication (password) successful!
+DEBUG:paramiko.transport:[chan 0] Max packet in: 32768 bytes
+DEBUG:paramiko.transport:Received global request "hostkeys-00@openssh.com"
+DEBUG:paramiko.transport:Rejecting "hostkeys-00@openssh.com" global request from server.
+DEBUG:paramiko.transport:[chan 0] Max packet out: 32768 bytes
+DEBUG:paramiko.transport:Secsh channel 0 opened.
+DEBUG:paramiko.transport:[chan 0] Sesch channel 0 request ok
+INFO:paramiko.transport.sftp:[chan 0] Opened sftp connection (server version 3)
+INFO:root:<paramiko.sftp_client.SFTPClient object at 0x000001B133E75B88>
+DEBUG:paramiko.transport.sftp:[chan 0] open(b'/fm02/DMS-FM-DFM02-20200918-01.csv', 'r')
+DEBUG:paramiko.transport.sftp:[chan 0] open(b'/fm02/DMS-FM-DFM02-20200918-01.csv', 'r') -> 00000000
+DEBUG:paramiko.transport.sftp:[chan 0] close(00000000)
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): api.map.baidu.com:80
+DEBUG:urllib3.connectionpool:http://api.map.baidu.com:80 "GET /geocoding/v3/?address=test&ak=bRKF4EQsu45sSBqVYH4G9LykCwI2W6KD&output=json HTTP/1.1" 200 92
+INFO:root:----------------------百度部分数据获取完成---------------------------------
+INFO:root:==========第一次获取数据**开始**==========
+INFO:root:==========第一次获取数据**结束**==========
+INFO:root:==========第二次获取数据**开始**==========
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): api.map.baidu.com:80
+DEBUG:urllib3.connectionpool:http://api.map.baidu.com:80 "GET /geocoding/v3/?address=test&ak=bRKF4EQsu45sSBqVYH4G9LykCwI2W6KD&output=json HTTP/1.1" 200 92
+INFO:root:----------------------百度部分数据获取完成---------------------------------
+INFO:root:==========第二次获取数据**结束**==========
+INFO:root:result_data3:0
+INFO:root:程序运行完成
+DEBUG:paramiko.transport:EOF in transport thread

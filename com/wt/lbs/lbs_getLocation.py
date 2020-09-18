@@ -42,6 +42,42 @@ def get_csv():
         line = remote_file.readline().strip()
     return data
 
+# 通过address来获取数据
+def get_lbs_addr(data):
+    num = 0
+    # 需要高德第二次请求的数据
+    back_data = []
+    # 高德第一次获取的要处理的数据
+    addr_data1 = []
+    addr_data2 = []
+    for i in range(0, len(data), 1):
+        url = "https://restapi.amap.com/v3/geocode/geo?key=411086673a23fac7fa594a30d371da48&address=" + data[i][10]
+        resource_data = requests.get(url=url, verify=False)
+        try:
+            if json.loads(resource_data.text)['count'] == '0' and data[i][4] != 'test':
+                # print(data[i][4] + "------" + resource_data.text)
+                back_data.append(data[i])
+            elif data[i][4] != 'test':
+                addr_data1.append(resource_data.text + "&&" + ",".join(data[i]))
+        except Exception as result:
+            print(result)
+    print("----------------------高德第一部分数据获取完成---------------------------------")
+
+    # 需要百度地图解析的经销商
+    re_data = []
+    for j in range(0, len(back_data), 1):
+        url1 = "https://restapi.amap.com/v3/place/text?key=5d903501cb5aa750d9501d11f86c94b9&keywords=" + \
+               back_data[j][10] + "&extensions=all&types=020000"
+        resource_data1 = requests.get(url=url1, verify=False)
+        if json.loads(resource_data1.text)['count'] == '0':
+            num += 1
+            re_data.append(back_data[j])
+            # print(back_data[j][4] + "==" + resource_data1.text)
+        else:
+            addr_data2.append(resource_data1.text + "&&" + ",".join(back_data[j]))
+    print("----------------------高德第二部分数据获取完成---------------------------------")
+
+    return re_data,addr_data1,addr_data2
 
 # 获取经纬信息
 """:arg
@@ -50,7 +86,6 @@ def get_csv():
         2.将第一次请求不到的经销商的名称再进行一次请求
         3.将第二次依旧请求不到的数据返回，向百度地图请求
 """
-
 
 def get_log_lat(data):
     num = 0
@@ -98,7 +133,7 @@ def get_log_lat_baidu(data):
     # 第一次请求主要是获取到经纬度
     for k in range(0, len(data), 1):
         url = "http://api.map.baidu.com/geocoding/v3/?address=" + data[k][
-            4] + "&ak=d0FaYLZV11VDUPifOWdSPsItnIvBkKeR&output=json"
+            4] + "&ak=0I4Vjc2m3XkAbtDZyusF7DbYQxICqnNw&output=json"
         resource_data2 = requests.get(url=url, verify=False)
         du_data.append(resource_data2.text)
     # 第二次请求通过获取到的经纬度，再获取到具体的省市区县信息
@@ -106,7 +141,7 @@ def get_log_lat_baidu(data):
         one_d = json.loads(du_data[h])
         lng = one_d['result']['location']['lng']
         lat = one_d['result']['location']['lat']
-        url = "http://api.map.baidu.com/reverse_geocoding/v3/?ak=d0FaYLZV11VDUPifOWdSPsItnIvBkKeR&output=json&coordtype=wgs84ll&location="+str(lat)+","+str(lng)
+        url = "http://api.map.baidu.com/reverse_geocoding/v3/?ak=0I4Vjc2m3XkAbtDZyusF7DbYQxICqnNw&output=json&coordtype=wgs84ll&location="+str(lat)+","+str(lng)
         resource_data = requests.get(url=url,verify=False)
         re_data.append(resource_data.text + "&&" + ",".join(data[h]))
     print("----------------------百度部分数据获取完成---------------------------------")
@@ -425,6 +460,21 @@ if __name__ == '__main__':
     # 从远程的csv获取数据
     data = get_csv()
 
+    print("==========根据address获取数据**开始**==========")
+    re_data,addr_data1,addr_data2 = get_lbs_addr(data)
+    print("bakc_data length:")
+    print(len(re_data))
+    print("addr_data1 length:")
+    print(len(addr_data1))
+    print("addr_data2 length:")
+    print(len(addr_data2))
+
+    bd_data = get_log_lat_baidu(re_data)
+    print("bd_data length:")
+    print(len(bd_data))
+    print("==========根据address获取数据**结束**==========")
+
+    print("==========根据name获取数据**开始**==========")
     # re_data:在高德请求剩余的数据，geo_data1：第一次高德请求到的数据，geo_data2：第二次高德请求到的数据
     re_data, geo_data1, geo_data2 = get_log_lat(data)
     # 去百度地图获取经纬度,拿到返回的数据
@@ -445,11 +495,10 @@ if __name__ == '__main__':
     print("result_data3:%d"%len(result_data3))
     # 将处理好的三个数据进行合并
     result_data = result_data1 + result_data2 + result_data3
-
-    print(result_data[0])
+    print("==========根据address获取数据**结束**==========")
 
     # 向mongodb插入数据
-    save(result_data)
+    # save(result_data)
 
 
 
