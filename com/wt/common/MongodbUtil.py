@@ -10,6 +10,15 @@
 import logging
 import pymongo
 from pymongo import GEO2D
+# 正式
+host = '62.234.72.139'
+username = 'admin'
+passwd = 'Autopai2018'
+
+# 测试
+host1 = '132.232.207.113'
+username1 = 'root'
+passwd1 = 'autopai123'
 
 # 更新数据
 def update_data_ford(result_data):
@@ -27,9 +36,9 @@ def update_data_ford(result_data):
 
 def save_data_ford(result_data):
     logging.info("数据开始更新.....")
-    myclient = pymongo.MongoClient(host='62.234.72.139', port=27017)
+    myclient = pymongo.MongoClient(host=host1, port=27017)
     db = myclient.admin
-    db.authenticate("admin", "Autopai2018")
+    db.authenticate(username1,passwd1)
     my_db = myclient.poi
     mycol = my_db.ford_website_sales
     for i in range(0, len(result_data), 1):
