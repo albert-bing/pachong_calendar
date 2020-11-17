@@ -29,4 +29,5 @@ if __name__ == '__main__':
         year = time.strftime("%Y", time.localtime())
         result_data = FormatDataUtil.format_data(d1, d2, d3, year,'week')
         result_data.append('week')
+        # print(result_data)
         MysqlUtil.insert_data_cons_week(result_data)

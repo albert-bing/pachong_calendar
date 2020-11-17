@@ -25,6 +25,19 @@ def update_data_ford(result_data):
     logging.info("数据更新完成！！")
 
 
+def save_data_ford(result_data):
+    logging.info("数据开始更新.....")
+    myclient = pymongo.MongoClient(host='62.234.72.139', port=27017)
+    db = myclient.admin
+    db.authenticate("admin", "Autopai2018")
+    my_db = myclient.poi
+    mycol = my_db.ford_website_sales
+    for i in range(0, len(result_data), 1):
+        mycol.insert_one(eval(result_data[i]))
+    mycol.create_index([("location", GEO2D)], name='location')
+    logging.info("数据更新完成！！")
+
+
 # 移除消失的经销商
 def remove_fords_data(data):
     logging.info("数据开始移除.....")
@@ -40,9 +53,9 @@ def remove_fords_data(data):
 
 # 查询所有已存好的数据
 def select_fords_all():
-    myclient = pymongo.MongoClient(host='129.28.93.48', port=27017)
+    myclient = pymongo.MongoClient(host='62.234.72.139', port=27017)
     db = myclient.admin
-    db.authenticate("root", "autopai123")
+    db.authenticate("admin", "Autopai2018")
     my_db = myclient.poi
     mycol = my_db.ford_website_sales
     data_all = mycol.find()

@@ -2,7 +2,7 @@
 # 开发团队：大数据组
 # 开发者：albert·bing
 # 开发时间：2020/7/5 20:13
-# 文件名称：yellow_calendar.py
+# 文件名称：lbs_getLocation_new.py
 # 开发工具：PyCharm
 
 
@@ -15,6 +15,7 @@ from com.wt.common import MongodbUtil
 import requests
 import paramiko
 import time
+import pandas as pd
 
 # 忽略https的安全警告
 urllib3.disable_warnings()
@@ -26,7 +27,10 @@ logging.info(time.strftime('%Y%m%d', time.localtime(time.time())))
 def get_csv():
     client = paramiko.SSHClient()
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    client.connect("120.26.146.183", "6143", "czsqauser", "#UIOP2wsxcde45", timeout=5)
+    # 正式环境
+    client.connect("47.96.21.66", "6143", "cz_proftp", "#DFGcvbhu87ytr", timeout=5)
+    # 测试环境
+    # client.connect("120.26.146.183", "6143", "czsqauser", "#UIOP2wsxcde45", timeout=5)
     sftp_client = client.open_sftp()
     logging.info(sftp_client)
     date_str = time.strftime('%Y%m%d', time.localtime(time.time()))
@@ -40,6 +44,9 @@ def get_csv():
         one_data = line.split(",")
         data.append(one_data)
         line = remote_file.readline().strip()
+
+    # test = pd.DataFrame(data=data)
+    # test.to_csv('./test1.csv')
     return data
 
 
@@ -59,7 +66,7 @@ def get_log_lat_baidu(data):
             4] + "&ak=bRKF4EQsu45sSBqVYH4G9LykCwI2W6KD&output=json"
         resource_data2 = requests.get(url=url, verify=False)
         #  睡眠100ms，防止并发过量
-        time.sleep(0.1)
+        time.sleep(0.2)
         du_data.append(resource_data2.text)
     # 第二次请求通过获取到的经纬度，再获取到具体的省市区县信息
     for h in range(0, len(data), 1):
@@ -74,7 +81,7 @@ def get_log_lat_baidu(data):
         else:
             pro_data.append(data[h])
         #  睡眠100ms，防止并发过量
-        time.sleep(0.1)
+        time.sleep(0.2)
     logging.info('----------------------百度部分数据获取完成---------------------------------')
     return re_data, pro_data
 
@@ -246,24 +253,25 @@ if __name__ == '__main__':
     data = get_csv()
 
     # 获取mongodb中之前就存好的数据
-    get_data,count = MongodbUtil.select_fords_all()
-    existed_data = []
-    # 将从mongodb中获取的数据格式转化为数组
-    for i in range(0,count,1):
-        existed_data.append(get_data[i])
-    # 对比更新的数据
-    not_exist_data,remove_data = compare_data(data, existed_data)
+    # get_data,count = MongodbUtil.select_fords_all()
+    # if count != 0:
+    #     existed_data = []
+    #     # 将从mongodb中获取的数据格式转化为数组
+    #     for i in range(0,count,1):
+    #         existed_data.append(get_data[i])
+    #     # 对比更新的数据
+    #     not_exist_data,remove_data = compare_data(data, existed_data)
+    #     MongodbUtil.remove_fords_data(remove_data)
+    # else:
+    #     not_exist_data = data
 
     # 去百度地图获取经纬度,拿到返回的数据
-    if len(not_exist_data) > 0:
-        du_data, pro_data = get_log_lat_baidu(not_exist_data)
+    if len(data) > 0:
+        du_data, pro_data = get_log_lat_baidu(data)
         logging.info("==========第一次获取数据**开始**==========")
         # 处理百度返回的数据
-        print(pro_data)
         print("du_data:%d" % len(du_data))
         print("pro_data:%d" % len(pro_data))
-        for i in range(0, len(du_data), 1):
-            print(du_data[i])
         logging.info("==========第一次获取数据**结束**==========")
 
         logging.info("==========第二次获取数据**开始**==========")
@@ -271,8 +279,11 @@ if __name__ == '__main__':
         logging.info("==========第二次获取数据**结束**==========")
         result_data3 = analysis_data(du_data + du_data2)
         logging.info("result_data3:%d" % len(result_data3))
-
+        for i in range(0, len(result_data3), 1):
+            print(result_data3[i])
         # # 向mongodb插入数据
-        if len(result_data3) > 0:
-            save(result_data3)
+        # if len(result_data3) > 0:
+        #     save(result_data3)
+    test = pd.DataFrame(data=result_data3)
+    test.to_csv('./rest.csv')
     logging.info("程序运行完成")

@@ -55,13 +55,14 @@ def format_data(data1, data2, data3, year, level):
     constellation = soup_data1.text[0:3]
     # 切片末尾数
     slice_last_num = 0
-    if level == 'year':
-        slice_last_num = -11
-    elif level == 'month' or level == 'week':
-        slice_last_num = -8
-    elif level == 'day':
-        slice_last_num = -4
-    today_date = year + '年' + soup_data1.text[slice_last_num:]
+    # if level == 'year':
+    #     slice_last_num = -11
+    # elif level == 'month' or level == 'week':
+    #     ww = soup_data1.text.split("势")[1]
+    #     slice_last_num = 0
+    # elif level == 'day':
+    #     slice_last_num = -4
+    today_date = year + '年' + soup_data1.text.split("势")[1]
     list_data.append(constellation)
     list_data.append(today_date)
 
