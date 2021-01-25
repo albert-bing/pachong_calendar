@@ -70,3 +70,15 @@ def select_fords_all():
     data_all = mycol.find()
     count = mycol.count()
     return data_all, count
+
+def update_address_all(data):
+    logging.info("数据开始更新.....")
+    myclient = pymongo.MongoClient(host=host1, port=27017)
+    db = myclient.admin
+    db.authenticate(username1,passwd1)
+    my_db = myclient.poi
+    mycol = my_db.ford_website_sales
+    for i in range(0,len(data),1):
+        # print(str((i+1))+"->"+data[i][0]+"=="+data[i][1])
+        mycol.update_one({'name':data[i][0]},{'$set':{'address':data[i][1]}})
+

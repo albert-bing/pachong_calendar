@@ -7,6 +7,9 @@
 
 
 #  start your code
+import sys
+sys.path.append('/home/hadoop/programs/spider/WTP66_BigdataCrawler')
+from com.wt.config import config
 # 导入selenium的驱动接口
 from selenium import webdriver
 # 导入键盘操作的keys包
@@ -14,7 +17,6 @@ from selenium.webdriver.common.keys import Keys
 # 导入chrome选项
 from selenium.webdriver.chrome.options import Options
 
-from com.wt.config import config
 
 import json
 
@@ -87,8 +89,8 @@ def get_source_data(driver):
 
 
             # 插入一个省的所有数据
-        print(insert_pro_data)
-        # MysqlUtil.insert_foreign_data(insert_pro_data)
+       # print(insert_pro_data)
+        MysqlUtil.insert_foreign_data(insert_pro_data)
 
 
 def get_every_data(driver):
@@ -98,15 +100,12 @@ def get_every_data(driver):
     driver.find_element_by_tag_name("span").click()
 
     soup = BeautifulSoup(driver.page_source, "html.parser")
-    con_trs_data = soup.find_all("tr", attrs={"class": "VirusTable_1-1-279_2AH4U9"})
+    con_trs_data = soup.find_all("tr", attrs={"class": "VirusTable_1-1-287_2AH4U9"})
 
 
-    print(len(con_trs_data))
+   # print(len(con_trs_data))
 
 
 if __name__ == '__main__':
     driver = create_driver()
     get_source_data(driver)
-
-    time.sleep(1)
-    driver.quit()
