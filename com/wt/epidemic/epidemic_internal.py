@@ -1,7 +1,7 @@
 # -*- encoding:utf-8 -*-
 # 开发团队：大数据组
 # 开发者：albert·bing
-# 开发时间：2020/7/5 20:13
+# 开发时间：2021/01/25 20:13
 # 文件名称：yellow_calendar.py
 # 开发工具：PyCharm
 
@@ -31,7 +31,7 @@ import time
 # 忽略https的安全警告
 urllib3.disable_warnings()
 
-number="287"
+number="295"
 
 # 获取省份的历史疫情数据
 def get_data_resource_province_history(driver):
@@ -82,14 +82,20 @@ def get_data_resource_province_history(driver):
             pro_day_data = []
 
         # 插入一个省的所有数据
-        #print(insert_pro_data)
-        MysqlUtil.insert_internal_province_data(insert_pro_data)
+        print(insert_pro_data)
+        # MysqlUtil.insert_internal_province_data(insert_pro_data)
 
 
 # 获取省份的当日数据--并且插入
 def get_data_resource_province(driver):
+    # https://voice.baidu.com/act/newpneumonia/newpneumonia/?from=osari_pc_3#tab0
     driver.get("https://voice.baidu.com/act/newpneumonia/newpneumonia/?from=osari_pc_3#tab0")
-    # 点击打开省份的下拉列表
+    # 屏幕向下滚动，获取点击事件
+    # driver.execute_script("window.scrollTo(0,1000);")
+    # 点击打开省份的下拉列表  Common_1-1-295_3lDRV2
+    driver.find_element_by_class_name("Common_1-1-"+number+"_3lDRV2").click()
+    # 屏幕向下滚动，获取点击事件
+    driver.execute_script("window.scrollTo(0,1000);")
     driver.find_element_by_class_name("Common_1-1-"+number+"_3lDRV2").click()
 
     soup = BeautifulSoup(driver.page_source, "html.parser")
@@ -118,8 +124,8 @@ def get_data_resource_province(driver):
         insert_pro_data.append(p_data)
 
     # 插入所有省的当日数据
-    # print(insert_pro_data)
-    MysqlUtil.insert_internal_cur_day_data(insert_pro_data)
+    print(insert_pro_data)
+    # MysqlUtil.insert_internal_cur_day_data(insert_pro_data)
 
     return insert_pro_data
 
@@ -169,8 +175,8 @@ def get_data_resource_city(driver, pro_list):
                 c_list.append(p_data)
 
         # 一个省的市数据，批量插入一次
-        # print(c_list)
-        MysqlUtil.insert_internal_cur_day_data(c_list)
+        print(c_list)
+        # MysqlUtil.insert_internal_cur_day_data(c_list)
 
         city_trs_data = []
         tds = []
@@ -230,7 +236,8 @@ def get_import_abroad_data(driver, pro_list):
         # 点击关闭
         trs_list[num].click()
     # 一个省的市数据，批量插入一次
-    MysqlUtil.insert_import_abroad(import_list)
+    print(import_list)
+    # MysqlUtil.insert_import_abroad(import_list)
 
 # 创建driver
 def create_driver():
@@ -252,6 +259,6 @@ if __name__ == '__main__':
     get_import_abroad_data(driver,pro_list)
     time.sleep(5)
     # 给数据添加area_id
-    MysqlUtil.insert_internal_cur_day_data_add_areaId()
+    # MysqlUtil.insert_internal_cur_day_data_add_areaId()
     time.sleep(1)
     #driver.quit()

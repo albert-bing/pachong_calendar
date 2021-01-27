@@ -39,6 +39,5 @@ if __name__ == '__main__':
     #
     # pro_text = quote("北京")
     # print(pro_text)
-    list1 = []
-    list1.append([1,2,3])
-    print(list1)
+    create_time = time.strftime('%Y.%m.%d', time.localtime(time.time()))
+    print(create_time)
